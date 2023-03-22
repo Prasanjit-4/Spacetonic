@@ -2,27 +2,22 @@ package com.example.spacetonic
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -31,6 +26,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun bmiCalculator()
 {
+    var btnEnableState = false
     var height by rememberSaveable {
         mutableStateOf("")
     }
@@ -40,7 +36,7 @@ fun bmiCalculator()
     }
 
     var bmi by rememberSaveable {
-        mutableStateOf(0f)
+        mutableStateOf("")
     }
 
     var bmiRange: String by rememberSaveable {
@@ -81,33 +77,37 @@ fun bmiCalculator()
             value = height,
             onValueChange = {height=it},
             label = { Text("Height")},
-            placeholder={Text("Enter your height in m")},
+            placeholder={Text("Enter your height in cm")},
             modifier = Modifier.fillMaxWidth()
 
         )
 
-        Row{
-            Text(text = bmi.toString(),modifier=Modifier.padding(16.dp))
-            Text(text=bmiRange.toString(), Modifier.padding(16.dp),color=rangeColor)
-        }
 
+        Text(text = bmi.toString(),modifier=Modifier.padding(16.dp))
+
+        Text(text=bmiRange.toString(), Modifier.padding(16.dp),color=rangeColor)
 
 
         FilledTonalButton(onClick = {
-            bmi=weight.toFloat()/(height.toFloat()*height.toFloat())
+            var bmiVal=(weight.toFloat()/((height.toFloat())/100*(height.toFloat()/100)))
+            bmi=bmiVal.toString()
             weight=""
             height=""
-            if(bmi<18.5){
+            if(bmiVal<18.5){
                 bmiRange="Underweight"
-            }else if(bmi in 18.5..24.9){
+            }else if(bmiVal in 18.5..24.9){
                 bmiRange="Healthy Weight"
-            }else if(bmi in 25.0..29.9){
+            }else if(bmiVal in 25.0..29.9){
                 bmiRange="Overweight"
             }else{
                 bmiRange="Obese"
             }
-        }) {
+        },
+            enabled= weight!="" && height!=""
+        ) {
+
             Text(text = "Calculate BMI")
+
         }
 
 
