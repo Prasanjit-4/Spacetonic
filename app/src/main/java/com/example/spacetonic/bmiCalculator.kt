@@ -1,15 +1,23 @@
 package com.example.spacetonic
 
+import android.graphics.drawable.Icon
+import androidx.compose.material3.TopAppBar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -52,68 +60,71 @@ fun bmiCalculator()
         else -> {
             MaterialTheme.colorScheme.primary}
     }
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 4.dp, vertical = 8.dp)
-    )
-    {
-
-
-
-        OutlinedTextField(
-            value = weight,
-            onValueChange = {weight=it},
-            label = { Text("Weight") },
-            placeholder={Text("Enter your weight in kg")},
+    Column {
+        
+        TopAppBar(title = {Text(text="Spacetonic", color = Color.White)},colors=TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.DarkGray))
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
+                .fillMaxSize()
+                .padding(horizontal = 4.dp, vertical = 8.dp)
         )
-
-        OutlinedTextField(
-            value = height,
-            onValueChange = {height=it},
-            label = { Text("Height")},
-            placeholder={Text("Enter your height in cm")},
-            modifier = Modifier.fillMaxWidth()
-
-        )
+        {
 
 
-        Text(text = bmi.toString(),modifier=Modifier.padding(16.dp))
+            OutlinedTextField(
+                value = weight,
+                onValueChange = { weight = it },
+                label = { Text("Weight") },
+                placeholder = { Text("Enter your weight in kg") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp).absolutePadding(left=12.dp,right=12.dp)
+            )
 
-        Text(text=bmiRange.toString(), Modifier.padding(16.dp),color=rangeColor)
+            OutlinedTextField(
+                value = height,
+                onValueChange = { height = it },
+                label = { Text("Height") },
+                placeholder = { Text("Enter your height in cm") },
+                modifier = Modifier.fillMaxWidth().absolutePadding(left=12.dp,right=12.dp),
+            )
 
 
-        FilledTonalButton(onClick = {
-            var bmiVal=(weight.toFloat()/((height.toFloat())/100*(height.toFloat()/100)))
-            bmi=bmiVal.toString()
-            weight=""
-            height=""
-            if(bmiVal<18.5){
-                bmiRange="Underweight"
-            }else if(bmiVal in 18.5..24.9){
-                bmiRange="Healthy Weight"
-            }else if(bmiVal in 25.0..29.9){
-                bmiRange="Overweight"
-            }else{
-                bmiRange="Obese"
+            Text(text = bmi.toString(), modifier = Modifier.padding(16.dp))
+
+            Text(text = bmiRange.toString(), Modifier.padding(16.dp), color = rangeColor)
+
+
+            FilledTonalButton(
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Black), onClick = {
+                    var bmiVal =
+                        (weight.toFloat() / ((height.toFloat()) / 100 * (height.toFloat() / 100)))
+                    bmi = bmiVal.toString()
+                    weight = ""
+                    height = ""
+                    if (bmiVal < 18.5) {
+                        bmiRange = "Underweight"
+                    } else if (bmiVal in 18.5..24.9) {
+                        bmiRange = "Healthy Weight"
+                    } else if (bmiVal in 25.0..29.9) {
+                        bmiRange = "Overweight"
+                    } else {
+                        bmiRange = "Obese"
+                    }
+                },
+                enabled = weight != "" && height != "",
+                modifier = Modifier.fillMaxWidth().padding(16.dp)
+            ) {
+
+                Text(text = "Calculate BMI", color = Color.White)
+
             }
-        },
-            enabled= weight!="" && height!=""
-        ) {
 
-            Text(text = "Calculate BMI")
 
         }
 
 
-
-
-
     }
-
 }
